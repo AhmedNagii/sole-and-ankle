@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components/macro';
+import React from "react";
+import styled from "styled-components/macro";
 
-import { COLORS, WEIGHTS } from '../../constants';
-import { formatPrice, pluralize, isNewShoe } from '../../utils';
-import Spacer from '../Spacer';
+import { COLORS, WEIGHTS } from "../../constants";
+import { formatPrice, pluralize, isNewShoe } from "../../utils";
+import Spacer from "../Spacer";
 
 const ShoeCard = ({
   slug,
@@ -31,6 +31,23 @@ const ShoeCard = ({
       ? 'new-release'
       : 'default'
 
+  const getFlagValues = () => {
+    if (variant == "on-sale") {
+      return {
+        text: "Sale",
+        color: COLORS.primary,
+      };
+    } else if (variant == "new-release") {
+      return {
+        color: COLORS.secondary,
+        text:"just released"
+      };
+    } else {
+      return undefined;
+    }
+  };
+
+  const flagVal = getFlagValues();
   return (
     <Link href={`/shoe/${slug}`}>
       <Wrapper>
@@ -43,8 +60,9 @@ const ShoeCard = ({
           <Price>{formatPrice(price)}</Price>
         </Row>
         <Row>
-          <ColorInfo>{pluralize('Color', numOfColors)}</ColorInfo>
+          <ColorInfo>{pluralize("Color", numOfColors)}</ColorInfo>
         </Row>
+        {flagVal && <Flag color={flagVal.color}>{flagVal.text}</Flag>}
       </Wrapper>
     </Link>
   );
@@ -57,14 +75,29 @@ const Link = styled.a`
   max-width: 350px;
 `;
 
-const Wrapper = styled.article``;
+const Flag = styled.div`
+  position: absolute;
+  top: 8px;
+  right: -4px;
+  border-radius: 2px;
+  padding: 4px;
+  
+  font-size: 0.875rem;
+  color: ${COLORS.white};
+  background-color: ${(p) => p.color};
+`;
+
+const Wrapper = styled.article`
+  position: relative;
+`;
 
 const ImageWrapper = styled.div`
   position: relative;
 `;
 
 const Image = styled.img`
-width:100%`;
+  width: 100%;
+`;
 
 const Row = styled.div`
   font-size: 1rem;
